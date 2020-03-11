@@ -1,0 +1,3 @@
+{
+  "ConnectionString": "server=.\\sqlexpress;database=master;integrated security=true;"
+}
