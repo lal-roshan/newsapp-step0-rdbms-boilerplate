@@ -1,21 +1,21 @@
 {
-  "UserTableScript": "",
-  "UserProfileTableScript": "",
-  "NewsTableScript":"",
-  "ReminderTableScript":"",
-  "InsertScripts":{
-    "User":"",
-    "UserProfile":"",
-    "News":"",
-    "Reminder":""
+  "UserTableScript": "CREATE TABLE [User] ( UserId varchar(25) NOT NULL PRIMARY KEY, Password varchar(255));",
+  "UserProfileTableScript": "CREATE TABLE [UserProfile] ( UserId varchar(25) NOT NULL PRIMARY KEY, FirstName varchar(255) NOT NULL, LastName varchar(255), Contact varchar(15), Email varchar(255), CreatedAt DateTime);",
+  "NewsTableScript": "CREATE TABLE [News] ( NewsId int NOT NULL PRIMARY KEY, Title varchar(255)\tNOT NULL, Content varchar(255) NOT NULL, PublishedAt DateTime NOT NULL, CreatedBy varchar(25) FOREIGN KEY REFERENCES [User](UserID), Url varchar(255), UrlToImage varchar(255));",
+  "ReminderTableScript": "CREATE TABLE [Reminders] ( ReminderId int NOT NULL PRIMARY KEY, ScheduledAt DateTime NOT NULL, NewsId int NOT NULL FOREIGN KEY REFERENCES [News](NewsId));",
+  "InsertScripts": {
+    "User": "INSERT INTO [User] VALUES ('Jack', 'pass@123'), ('John', 'something#121'), ('Kevin', 'test@123');",
+    "UserProfile": "INSERT INTO [UserProfile] VALUES ('Jack', 'Jackson', 'James', '8899776655', 'jack@ymail.com', '20191207'), ('John', 'Johnson', 'dsouza', '7869543210', 'john@gmail.com', '20191225'), ('Kevin', 'Kevin', 'Lloyd', '9878685748', 'kevin@gmail.com', '20191201');",
+    "News": "INSERT INTO [News] VALUES (101, 'IT industry in 2020', 'IT industry was facing disruptive changes in 2019. It is expected to have positive growth in 2020', '20191201', 'Jack', NULL, NULL), (102, '2020 FIFA U-17 Women World Cup', 'The tournament will be held in India between 2 and 21 November 2020. It will mark the first time that India has hosted a FIFA women football tournament.', '20191205', 'Jack', NULL, NULL), (103, 'chandrayaan2-spacecraft', 'The Lander of Chandrayaan-2 was named Vikram after Dr Vikram A Sarabhai, the Father of the Indian Space Programme. It was designed to function for one lunar day.', '20191205', 'John', NULL, NULL), (104, 'NEFT transactions to be available 24x7', 'Bank customers will be able to transfer funds through NEFT around the clock on all days including weekends and holidays from December 16.', '20191207', 'John', NULL, NULL);",
+    "Reminder": "INSERT INTO [Reminders] VALUES (1, '20191204', 101), (2, '20191210', 102), (3, '20191210', 104);"
   },
-  "Query1":"",
-  "Query2":"",
-  "Query3":"",
-  "Query4":"",
-  "Query5":"",
-  "Query6":"",
-  "Query7":"",
-  "Query8":"",
-  "Query9":""
+  "Query1": "SELECT * FROM [UserProfile] WHERE CreatedAt >= '20191210';",
+  "Query2": "SELECT * FROM [UserProfile] U JOIN [News] N ON U.UserId = N.CreatedBy WHERE U.UserId = 'Jack';",
+  "Query3": "SELECT * FROM [UserProfile] U WHERE U.UserId = (SELECT N.CreatedBy FROM [News] N WHERE N.NewsId = 103);",
+  "Query4": "SELECT * FROM [UserProfile] U WHERE NOT EXISTS (SELECT N.CreatedBy FROM [News] N WHERE N.CreatedBy = U.UserId);",
+  "Query5": "SELECT N.NewsId, N.Title FROM [News] N JOIN [Reminders] R ON N.NewsId = R.NewsId;",
+  "Query6": "SELECT U.UserId, COUNT(N.NewsId) FROM [User] U LEFT JOIN [News] N ON U.UserId = N.CreatedBy GROUP BY U.UserId",
+  "Query7": "UPDATE [UserProfile] SET Contact = '9192939495' WHERE UserId = 'John';",
+  "Query8": "UPDATE [News] SET Title = 'IT industry growth can be seen in 2020' WHERE NewsId = 101;",
+  "Query9": "DELETE FROM [Reminders] WHERE NewsId IN (SELECT NewsId FROM [News] WHERE CreatedBy = 'Jack');"
 }
